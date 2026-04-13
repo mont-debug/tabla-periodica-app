@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Aprende la Tabla Periódica</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: #333;
+    }
+    h1 {
+      color: white;
+      margin-top: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 320px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    button {
+     
+      margin: 10px 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #ff7b00;
+      color: white;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #ff5500;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .score {
+      color: white;
+      font-weight: bold;
+    }
+    img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.btn-verificar {
+  background: #28a745; /* verde */
+}
+
+.btn-verificar:hover {
+  background: #218838;
+}
+
+.btn-siguiente {
+  background: #007bff; /* azul */
+}
+
+.btn-siguiente:hover {
+  background: #0056b3;
+}
+
+.btn-reiniciar {
+  background: #dc3545; /* rojo */
+}
+
+.btn-reiniciar:hover {
+  background: #a71d2a;
+}
+  </style>
+</head>
+<body>
+
+<h1>🎓 Aprende la Tabla Periódica (60 Elementos)</h1>
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDYUyQse90ArZU09jzU10_b0nYYJ8gN-i3dw&s" alt="Mendeleev">
+<p style="color:white;">👨‍🔬 Creador: Dmitri Mendeléyev (1869)</p>
+
+<p class="score">Puntos: <span id="puntos">0</span></p>
+
+<div class="card">
+  <h2 id="elemento">Elemento</h2>
+  <p>Escribe el símbolo:</p>
+  <input type="text" id="respuesta" placeholder="Ej: H, Na, Li">
+  <br>
+ <button class="btn-verificar" onclick="verificar()">Verificar</button>
+<button class="btn-siguiente" onclick="siguiente()">Siguiente</button>
+<button class="btn-reiniciar" onclick="reiniciar()">Reiniciar</button>
+  
+  <p id="resultado"></p>
+</div>
+
+
+<script>
+const elementos = [
+  {nombre:"Hidrógeno", simbolo:"H"},
+  {nombre:"Helio", simbolo:"He"},
+  {nombre:"Litio", simbolo:"Li"},
+  {nombre:"Berilio", simbolo:"Be"},
+  {nombre:"Boro", simbolo:"B"},
+  {nombre:"Carbono", simbolo:"C"},
+  {nombre:"Nitrógeno", simbolo:"N"},
+  {nombre:"Oxígeno", simbolo:"O"},
+  {nombre:"Flúor", simbolo:"F"},
+  {nombre:"Neón", simbolo:"Ne"},
+  {nombre:"Sodio", simbolo:"Na"},
+  {nombre:"Magnesio", simbolo:"Mg"},
+  {nombre:"Aluminio", simbolo:"Al"},
+  {nombre:"Silicio", simbolo:"Si"},
+  {nombre:"Fósforo", simbolo:"P"},
+  {nombre:"Azufre", simbolo:"S"},
+  {nombre:"Cloro", simbolo:"Cl"},
+  {nombre:"Argón", simbolo:"Ar"},
+  {nombre:"Potasio", simbolo:"K"},
+  {nombre:"Calcio", simbolo:"Ca"},
+  {nombre:"Escandio", simbolo:"Sc"},
+  {nombre:"Titanio", simbolo:"Ti"},
+  {nombre:"Vanadio", simbolo:"V"},
+  {nombre:"Cromo", simbolo:"Cr"},
+  {nombre:"Manganeso", simbolo:"Mn"},
+  {nombre:"Hierro", simbolo:"Fe"},
+  {nombre:"Cobalto", simbolo:"Co"},
+  {nombre:"Níquel", simbolo:"Ni"},
+  {nombre:"Cobre", simbolo:"Cu"},
+  {nombre:"Zinc", simbolo:"Zn"},
+  {nombre:"Galio", simbolo:"Ga"},
+  {nombre:"Germanio", simbolo:"Ge"},
+  {nombre:"Arsénico", simbolo:"As"},
+  {nombre:"Selenio", simbolo:"Se"},
+  {nombre:"Bromo", simbolo:"Br"},
+  {nombre:"Kriptón", simbolo:"Kr"},
+  {nombre:"Rubidio", simbolo:"Rb"},
+  {nombre:"Estroncio", simbolo:"Sr"},
+  {nombre:"Itrio", simbolo:"Y"},
+  {nombre:"Circonio", simbolo:"Zr"},
+  {nombre:"Niobio", simbolo:"Nb"},
+  {nombre:"Molibdeno", simbolo:"Mo"},
+  {nombre:"Tecnecio", simbolo:"Tc"},
+  {nombre:"Rutenio", simbolo:"Ru"},
+  {nombre:"Rodio", simbolo:"Rh"},
+  {nombre:"Paladio", simbolo:"Pd"},
+  {nombre:"Plata", simbolo:"Ag"},
+  {nombre:"Cadmio", simbolo:"Cd"},
+  {nombre:"Indio", simbolo:"In"},
+  {nombre:"Estaño", simbolo:"Sn"},
+  {nombre:"Antimonio", simbolo:"Sb"},
+  {nombre:"Telurio", simbolo:"Te"},
+  {nombre:"Yodo", simbolo:"I"},
+  {nombre:"Xenón", simbolo:"Xe"},
+  {nombre:"Cesio", simbolo:"Cs"},
+  {nombre:"Bario", simbolo:"Ba"},
+  {nombre:"Lantano", simbolo:"La"},
+  {nombre:"Cerio", simbolo:"Ce"},
+  {nombre:"Praseodimio", simbolo:"Pr"},
+  {nombre:"Neodimio", simbolo:"Nd"}
+];
+
+let actual = 0;
+let puntos = 0;
+
+function mostrar() {
+  document.getElementById("elemento").innerText = elementos[actual].nombre;
+  document.getElementById("respuesta").value = "";
+  document.getElementById("resultado").innerText = "";
+}
+
+function verificar() {
+  const input = document.getElementById("respuesta").value;
+  if(input.toLowerCase() === elementos[actual].simbolo.toLowerCase()){
+    document.getElementById("resultado").innerText = "✅ Correcto";
+    puntos++;
+  } else {
+    document.getElementById("resultado").innerText = "❌ Incorrecto: " + elementos[actual].simbolo;
+  }
+  document.getElementById("puntos").innerText = puntos;
+}
+
+function siguiente() {
+  actual = (actual + 1) % elementos.length;
+  mostrar();
+}
+function reiniciar() {
+  actual = 0;
+  puntos = 0;
+  document.getElementById("puntos").innerText = puntos;
+  mostrar();
+}
+
+mostrar();
+</script>
+
+</body>
+</html>
+
