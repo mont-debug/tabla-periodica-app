@@ -79,6 +79,10 @@
 .btn-reiniciar:hover {
   background: #a71d2a;
 }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
   </style>
 </head>
 <body>
@@ -91,6 +95,20 @@
 <p class="score">Puntos: <span id="puntos">0</span></p>
 
 <div class="card">
+  <p id="mensajeFinal" style="
+  display:none;
+  background:#28a745;
+  color:white;
+  padding:10px;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:10px;
+  animation: fadeIn 1s ease;
+">
+  🎉 ¡Felicidades! Reto terminado 👏<br>
+  Sigue practicando 💪📚
+</p>
   <h2 id="elemento">Elemento</h2>
   <p>Escribe el símbolo:</p>
   <input type="text" id="respuesta" placeholder="Ej: H, Na, Li">
@@ -188,7 +206,12 @@ function verificar() {
 }
 
 function siguiente() {
-  actual = (actual + 1) % elementos.length;
+  if (actual === elementos.length - 1) {
+    celebrar();
+    return;
+  }
+
+  actual++;
   mostrar();
 }
 function reiniciar() {
@@ -197,10 +220,39 @@ function reiniciar() {
   document.getElementById("puntos").innerText = puntos;
   mostrar();
 }
+function celebrar() {
+  // Confeti
+  confetti({
+    particleCount: 150,
+    spread: 100,
+    origin: { y: 0.6 }
+  });
+
+  //Sonido
+  document.getElementById("sonidoFinal").play();
+
+  // Mostrar mensaje bonito
+  const mensaje = document.getElementById("mensajeFinal");
+  mensaje.style.display = "block";
+
+  // Ocultarlo después
+  setTimeout(() => {
+    mensaje.style.display = "none";
+  }, 5000);
+
+  // Reiniciar después
+  setTimeout(() => {
+    reiniciar();
+  }, 5000);
+}
 
 mostrar();
 </script>
+<!-- LIBRERÍA CONFETI -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+<!-- SONIDO -->
+<audio id="sonidoFinal" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
 </body>
 </html>
 
